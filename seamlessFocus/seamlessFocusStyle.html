@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>完整轮播图</title>
+  <style type="text/css">
+    * {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      border: 0;
+    }
+    .screenImage{
+        width: 500px;
+        height: 200px;
+    }
+    .all {
+      width: 500px;
+      height: 200px;
+      padding: 7px;
+      border: 1px solid #ccc;
+      margin: 100px auto;
+      position: relative;
+    }
+
+    .screen {
+      width: 500px;
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .screen li {
+      width: 500px;
+      height: 200px;
+      overflow: hidden;
+      float: left;
+    }
+
+    .screen ul {
+      position: absolute;
+      left: 0;
+      top: 0px;
+      width: 3000px;
+    }
+
+    .all ol {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      line-height: 20px;
+      text-align: center;
+    }
+
+    .all ol li {
+      float: left;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border: 1px solid #ccc;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    .all ol li.current {
+      background: #DB192A;
+    }
+
+    #arr {
+      display: none;
+    }
+
+    #arr span {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      left: 5px;
+      top: 50%;
+      margin-top: -20px;
+      background: #000;
+      cursor: pointer;
+      line-height: 40px;
+      text-align: center;
+      font-weight: bold;
+      font-family: '黑体';
+      font-size: 30px;
+      color: #fff;
+      opacity: 0.3;
+      border: 1px solid #fff;
+    }
+
+    #arr #right {
+      right: 5px;
+      left: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="all" id='box'>
+  <div class="screen">
+    <ul>
+      <li><img src="images/1.jpg" class="screenImage" alt=""/></li>
+      <li><img src="images/2.jpg" class="screenImage" alt=""/></li>
+      <li><img src="images/3.jpg" class="screenImage" alt=""/></li>
+      <li><img src="images/4.jpg" class="screenImage" alt=""/></li>
+      <li><img src="images/5.jpg" class="screenImage" alt=""/></li>
+    </ul>
+    <ol>
+
+    </ol>
+  </div>
+  <div id="arr"><span id="left">&lt;</span><span id="right">&gt;</span></div>
+</div>
+<script src="common.js"></script>
+<script>
+  //封装动画函数----匀速的
+  //任意的一个元素移动到任意的目标位置
+  function animate(element,target) {
+    //清理定时器
+    clearInterval(element.timeId);
+    element.timeId=setInterval(function () {
+      //当前位置
+      var current=element.offsetLeft;
+      //每次移动的步数
+      var step=10;
+      //移动的是正数还是负数
+      step=current<target?step:-step;
+      //移动后的当前位置计算
+      current+=step;
+      //判断是否移动
+      if(Math.abs(target-current)>Math.abs(step)){
+        element.style.left=current+"px";
+      }else{
+        //直接到达目标
+        element.style.left=target+"px";
+        //清理定时去
+        clearInterval(element.timeId);
+      }
+    },10);
+  }
+  //获取所有需要的元素
+  //最外面的div
+  var box = my$("box");
+  //获取相框
+  var screen = box.children[0];
+  //相框的宽度
+  var imgWidth = screen.offsetWidth;
+  //获取ul
+  var ulObj = screen.children[0];
+  //获取ul中所有的li
+  var list = ulObj.children;
+  //获取ol
+  var olObj = screen.children[1];
+  //左右焦点的div
+  var arr = my$("arr");
+  //左按钮
+  var left = my$("left");
+  //右按钮
+  var right = my$("right");
+
+  var index=0;//这个变量中存储的就是鼠标进入ol中li的那个索引===============================
+  //创建li加入到ol中,根据ul中的li的个数创建
+  for (var i = 0; i < list.length; i++) {
+    var liObj = document.createElement("li");
+    liObj.innerHTML = (i + 1);//li中显示的数字
+    //添加自定义属性存储索引的值======================================================
+    liObj.setAttribute("index",i);
+    //加入到ol中
+    olObj.appendChild(liObj);
+    //为每个ol中的li添加鼠标进入的事件
+    liObj.onmouseover = function () {
+      //1---设置当前鼠标进入的li有背景颜色
+      for(var j=0;j<olObj.children.length;j++){
+        olObj.children[j].removeAttribute("class");
+      }
+      this.className="current";
+      //2---移动ul
+      //获取当前鼠标进入的li的索引=================================================
+      index=this.getAttribute("index");
+      //移动ul
+      animate(ulObj,-index*imgWidth);
+    };//end mouseover
+  }//end for
+  //设置ol中第一个li有默认的类样式========================================
+  olObj.children[0].className="current";
+  //把ul中第一个li复制一个,追加到ul中所有的li的最后
+  ulObj.appendChild(ulObj.children[0].cloneNode(true));
+
+  //自动移动
+  var timeId=setInterval(clickHandle,1000);
+  //鼠标进入最外面的box显示左右焦点的div
+  box.onmouseover=function () {
+    arr.style.display="block";
+    clearInterval(timeId);
+  };
+  //鼠标离开最外面的box隐藏左右焦点的div
+  box.onmouseout=function () {
+    arr.style.display="none";
+    timeId=setInterval(clickHandle,1000);
+  };
+
+  //right按钮点击
+  index=0;
+  right.onclick=clickHandle;
+  function clickHandle() {
+    //list是ul中所有的li
+    if(index === list.length-1){//如果index的索引值和ul中的所有的li的个数减1一样---5
+      //显示的是第6张图(实际上用户会认为是第1个,再点击按钮,用户应该看到第2个图)
+      index=0;//索引为0
+      ulObj.style.left=-index*imgWidth+"px";//直接把第6个图变成了第1个图
+    }
+    index++;
+    animate(ulObj,-index*imgWidth);//移动到了第二个图了
+
+    //index最大的值是5,
+    if(index === list.length-1){//index====>5
+      olObj.children[0].className="current";//ol中第一个li有类样式
+      //ol中最后一个li去掉类演示
+      olObj.children[olObj.children.length-1].className="";
+    }else{
+      //把ol中所有的li的类样式全部干掉
+      for(var i=0;i<olObj.children.length;i++){
+        olObj.children[i].className="";
+      }
+      olObj.children[index].className="current";
+    }
+  }
+  //left按钮点击
+  left.onclick=function () {
+    if(index===0){
+      index=list.length-1;//5
+      ulObj.style.left=-index*imgWidth+"px";
+    }
+    index--;
+    animate(ulObj,-index*imgWidth);
+    //设置按钮的样式同步
+    for(var i=0;i<olObj.children.length;i++){
+      //先把ol中的所有的li的类样式去掉
+      olObj.children[i].className="";
+    }
+    olObj.children[index].className="current";
+  };
+</script>
+
+</body>
+</html>

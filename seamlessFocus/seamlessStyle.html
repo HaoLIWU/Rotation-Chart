@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>无缝连接轮播图</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    ul {
+      list-style: none;
+
+    }
+
+    img {
+      vertical-align: top;
+      width: 300px;
+      height: 200px;
+    }
+
+    /*取消图片底部3像素距离*/
+    .box {
+      width: 300px;
+      height: 200px;
+      margin: 100px auto;
+      background-color: pink;
+      border: 1px solid red;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .box ul li {
+      float: left;
+    }
+
+    .box ul {
+      width: 1500px;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="box" id="screen">
+  <ul>
+    <li><img src="./images/1.jpg" alt=""/></li>
+    <li><img src="./images/2.jpg" alt=""/></li>
+    <li><img src="./images/3.jpg" alt=""/></li>
+    <li><img src="./images/4.jpg" alt=""/></li>
+    <li><img src="./images/1.jpg" alt=""/></li>
+  </ul>
+</div>
+<script src="./common.js"></script>
+<script>
+	var current = 0; //只声明一次
+	function f1(){
+		//获取ul
+		var ulObj = my$("screen").children[0];
+		//定义每30毫秒向左走10px
+		current-=10;
+
+		if(current<-1200){  //当向左移动了4张图片后，立即跳转到第一张图片
+			ulObj.style.left = 0+"px";
+			current = 0;
+		}else{  //要是大于-1200时，按照原来的 current 值走
+			ulObj.style.left = current+"px";
+		}
+	};
+	var timeId = setInterval(f1,80);
+	my$("screen").onmouseover = function(){
+		//清理定时器
+		clearInterval(timeId);
+	};
+	my$("screen").onmouseout = function(){
+		//鼠标离开之后，重新添加定时器
+		timeId = setInterval(f1,30);
+	};
+</script>
+
+</body>
+</html>
