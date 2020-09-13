@@ -1,0 +1,108 @@
+<!doctype html><!-- 声明 文档类型 网页 html5  -->
+<html><!-- 大别墅  包裹网页所有的内容 -->
+	<head><!-- 看不见的内容 -->
+		<meta charset='UTF-8'><!-- 万国码 -->
+		<title>CSS3动画轮播</title>
+		<meta name='keywords' content='动画,css3'><!--关键字-->
+		<meta name='descript' content=''><!--描述信息-->
+		<style>/* 网页中的装修公司 css层叠样式  给网页中元素添加样式*/
+			body{
+				margin:0;
+			}
+            .picImage{
+                width: 300px;
+                height: 180px;
+            }
+			.banner{
+				overflow:hidden;
+				position:relative;
+				width:1050px;/* 元素属性 :  属性值(单位); */
+				height:270px;
+				/* background-color:red; 背景颜色 */
+				border:2px solid blue;/* 边框:边框宽度 实线 颜色 */
+				margin:20px auto 0;   /*外边距*/
+			}
+			.banner .pic{
+				position:absolute;
+				z-index:2;
+				left:1050px;
+				top:45px;
+				width:300px;
+				height:180px;
+				background-color:blue;
+				animation:run 8s linear infinite ;
+				/*可把linear改成alternate 可产生不一样的效果*/
+			}
+			.banner .pic:nth-child(2){
+				animation-delay:2s;
+			}
+			.banner .pic:nth-child(3){
+				animation-delay:4s;
+			}
+			.banner .pic:nth-child(4){
+				animation-delay:6s;
+			}
+			.banner .pic:nth-child(5){
+				animation-delay:8s;
+			}
+			.banner .text{
+				position:absolute;
+				top:45px;
+				left:0;
+				width:100%;
+				height:180px;
+				line-height:180px;/* 行高*/
+				font-size:36px;    /*文字字体大小*/
+				color:blue;
+				text-align:center;/* 水平对齐方式: 居中 */
+				letter-spacing:20px;
+			}
+
+            @keyframes run{
+				0%{left:1050px;transform:scale(1);}
+
+				10%{left:750px;transform:scale(1.1);}
+				25%{left:750px;transform:scale(1.2);}
+
+				35%{left:375px;transform:scale(1.5);}
+				50%{left:375px;transform:scale(1.5);}
+
+				60%{left:0;transform:scale(1.2);}
+				75%{left:0;transform:scale(1.1);}
+
+				85%{left:-300px;transform:scale(0.8);}
+				100%{left:-300px;transform:scale(1);}
+			}
+		</style>
+	</head>
+	<body> <!--看得见的内容-->
+		<div class='banner'>
+			<div class='pic'>
+				<img class="picImage" src='./img/img01.jpg' alt='汽车'>
+			</div>
+			<div class='pic'>
+				<img class="picImage" src='./img/img02.jpg' alt='汽车'>
+			</div>
+			<div class='pic'>
+				<img class="picImage" src='./img/img03.jpg' alt='汽车'>
+			</div>
+			<div class='pic'>
+				<img class="picImage" src='./img/img04.jpg' alt='汽车'>
+			</div>
+			<div class='pic'>
+				<img class="picImage" src='./img/img05.jpg' alt='汽车'>
+			</div>
+			<div class='text'>一大波图片来袭...</div>
+		</div>
+	</body>
+</html>
+<!--
+	元素 盒模型 块元素
+	命名规范: 有意义的英文单词或缩写 见名之意
+	margin:;外边距 元素与元素之间的距离或元素与浏览器之间的距离
+	margin:2px; 上下左右外边距都是2px
+	margin:2px 3px;上外边距下外边距   右外边距左外边距
+	margin:2px 3px 4px; 上外边距  右外边距左外边距  下外边距
+	margin:2px 3px 4px 5px; 上外边距 右外边距 下外边距 左外边距
+
+-->
