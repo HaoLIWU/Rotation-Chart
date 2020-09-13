@@ -7,6 +7,8 @@
 ### Run It
 所有html文件都可以直接双击打开看效果
 
++ 3dStyle
+> 3d 轮播图
 + gallery
 > 美女画廊
 + middleGetBiggerStyle 
